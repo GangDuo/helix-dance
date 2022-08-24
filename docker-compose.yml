@@ -1,0 +1,29 @@
+version: '3'
+services:
+  app:
+    image: node:12.20.0
+    container_name: node-dev
+    command: "npm run dev"
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/src
+    working_dir: /src
+    environment:
+      NODE_ENV: development
+#    depends_on:
+#      - postgresql
+#      - adminer
+#
+#  postgresql:
+#    image: postgres:13.1
+#    environment:
+#      POSTGRES_PASSWORD: example # The default user is postgres
+#
+#  adminer:
+#    image: adminer
+#    ports:
+#      - 8080:8080
+#    depends_on:
+#      - postgresql
+#
