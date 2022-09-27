@@ -8,4 +8,10 @@ var sources = [
     {name: "本社",   reserve: 0, hold: 7,  want: 0,  week: 99},
 ];
 
-console.log(sources);
+//console.log(sources);
+// 週番号
+var xs = sources.map(x => x.week)
+.reduce((ax, x) => {ax[x] = x;return ax;}, [])
+.filter(x => x > 0)
+.sort();
+console.log(xs);
