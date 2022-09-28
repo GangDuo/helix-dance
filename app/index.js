@@ -1,6 +1,8 @@
 const fs = require("fs");
 
 var sources = init([
+/*
+    // BT500
     {name: "太田",   reserve: 2, hold: 2,  want: 6,  week: 36},
     {name: "熊谷",   reserve: 2, hold: 1,  want: 7,  week: 35},
     {name: "鶴ヶ島", reserve: 2, hold: 2,  want: 5,  week: 35},
@@ -8,9 +10,35 @@ var sources = init([
     {name: "浜松",   reserve: 2, hold: 12, want: -2, week: 36},
     {name: "ｽﾏｰｸ",   reserve: 2, hold: 2,  want: 7,  week: 35},
     {name: "本社",   reserve: 0, hold: 7,  want: 0,  week: 99},
+*/
+    // BT600
+    {name:"本店",       reserve: 2, hold: 2,  want: 10, week: 35},
+    {name:"伊勢崎",     reserve: 2, hold: 2,  want: 0,  week: 33},
+    {name:"中居",       reserve: 2, hold: 2,  want: 6,  week: 35},
+    {name:"並榎",       reserve: 2, hold: 2,  want: 0,  week: 32},
+    {name:"小山",       reserve: 2, hold: 2,  want: 4,  week: 35},
+    {name:"ｲﾝﾀｰﾊﾟｰｸ",   reserve: 2, hold: 2,  want: 6,  week: 36},
+    {name:"新座",       reserve: 2, hold: 4,  want: 2,  week: 35},
+    {name:"東松山",     reserve: 2, hold: 10, want: 0,  week: 32},
+    {name:"相模原",     reserve: 2, hold: 2,  want: 4,  week: 36},
+    {name:"FKD",        reserve: 2, hold: 2,  want: 4,  week: 36},
+    {name:"並木",       reserve: 2, hold: 6,  want: 0,  week: 35},
+    {name:"大宮",       reserve: 2, hold: 2,  want: 8,  week: 35},
+    {name:"ひたちなか", reserve: 2, hold: 4,  want: 0,  week: 36},
+    {name:"新前橋",     reserve: 2, hold: 2,  want: 8,  week: 36},
+    {name:"京都桂川",   reserve: 2, hold: 2,  want: 2,  week: 36},
+    {name:"上尾",       reserve: 2, hold: 12, want: 0,  week: 34},
+    {name:"松山",       reserve: 2, hold: 6,  want: 4,  week: 35},
+    {name:"守谷",       reserve: 2, hold: 2,  want: 4,  week: 35},
+    {name:"橿原",       reserve: 2, hold: 4,  want: 0,  week: 32},
+    {name:"柏",         reserve: 2, hold: 2,  want: 6,  week: 36},
+    {name:"橋本",       reserve: 2, hold: 2,  want: 8,  week: 36},
+    {name:"長岡",       reserve: 2, hold: 4,  want: 8,  week: 36},
+    {name:"ｱｳﾄﾚｯﾄ",     reserve: 1, hold: 1,  want: 2,  week: 35},
+    {name:"本社",       reserve: 0, hold: 17, want: 0,  week: 99},    
 ]);
 
-var isBt600 = false;
+var isBt600 = true;
 //console.log(sources);
 // 週番号
 var xs = sources.map(x => x.week)
