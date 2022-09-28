@@ -50,6 +50,10 @@ for(let i = 0; i < xs.length; i++) {
 try {
   // 拠点間移動履歴
   fs.writeFileSync("history.txt", JSON.stringify(g.colds, null, "\t"));
+  // 最終日に拠点で保持している数量
+  // finalize
+  storesHeldOnLastDay = g.colds.map(x => ({name: x.name, reserve: x.reserve, hold:x.hold + x.reserve}));
+  fs.writeFileSync("fixed.txt", JSON.stringify(storesHeldOnLastDay, null, "\t"));
 } catch(e) {
   console.log(e.message);
 }
