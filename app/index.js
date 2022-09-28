@@ -8,6 +8,7 @@ var sources = init([
     {name: "本社",   reserve: 0, hold: 7,  want: 0,  week: 99},
 ]);
 
+var isBt600 = false;
 //console.log(sources);
 // 週番号
 var xs = sources.map(x => x.week)
@@ -45,5 +46,86 @@ for(let i = 0; i < xs.length; i++) {
 }
 
 function forward(hots_, colds_) {
-  return {hots:hots_, colds:colds_};
+  // クローン生成
+  let hots = JSON.parse(JSON.stringify(hots_));
+  let colds = JSON.parse(JSON.stringify(colds_));
+
+  for(let i = 0; i < hots.length; i++) {
+    if(hots[i].name === "本社") continue;
+    if(hots[i].want <= 0) continue;
+
+    let flag = false;
+    for(let j = 0; j < colds.length; j++) {
+      if(colds[j].hold >= hots[i].want)  {
+        flag = true;
+        break;
+      }
+    }
+
+    if(flag) {
+      // 1店舗でほしい台数を賄える
+      for(let j = 0; j < colds.length; j++) {
+        if(colds[j].hold >= hots[i].want)  {
+          let qty = hots[i].want
+
+          hots[i].in[hots[i].week] = hots[i].in[hots[i].week] || [];
+          hots[i].in[hots[i].week].push({
+            store: colds[j].name,
+            qty,
+          });
+          colds[j].out[hots[i].week] = colds[j].out[hots[i].week] || [];
+          colds[j].out[hots[i].week].push({
+            store: hots[i].name,
+            qty,
+          });
+
+          colds[j].hold -= qty;
+          colds[j].want += qty;
+          hots[i].hold += qty;
+          hots[i].want -= qty;
+          break;
+        }
+      }
+    } else {
+      // 1店舗では足りない場合
+      for(let j = 0; j < colds.length; j++) {
+        let ex = 0;
+        let qty = colds[j].hold;
+        
+        if(hots[i].want <= 0) break;
+
+        console.assert(qty > 0, `${hots[i].name} <- ${colds[j].name} の在庫がありません！`);
+        // BT600は奇数の移動を許可しない
+        if(isBt600 && qty === 1) {
+          continue;
+        }
+        if(qty <= 0) continue;
+
+        if(hots[i].want < colds[j].hold) {
+          qty = hots[i].want;
+          ex = colds[j].hold - hots[i].want
+        }
+        
+        hots[i].in[hots[i].week] = hots[i].in[hots[i].week] || []
+        hots[i].in[hots[i].week] = [...hots[i].in[hots[i].week], ...[{
+          store: colds[j].name,
+          qty,
+        }]]
+
+        colds[j].out[hots[i].week] = colds[j].out[hots[i].week] || []
+        colds[j].out[hots[i].week] = [...colds[j].out[hots[i].week], ...[{
+          store: hots[i].name,
+          qty,
+        }]]
+
+        hots[i].want -= qty;
+        hots[i].hold += qty;
+        colds[j].want += qty;
+        colds[j].hold = ex;
+
+        console.log(`在庫移動: ${hots[i].name} <- ${colds[j].name} ${qty} あと${hots[i].want}個`);
+      }
+    }  
+  }
+  return {hots, colds};
 }
