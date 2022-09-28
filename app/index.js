@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 var sources = init([
     {name: "太田",   reserve: 2, hold: 2,  want: 6,  week: 36},
     {name: "熊谷",   reserve: 2, hold: 1,  want: 7,  week: 35},
@@ -37,12 +39,23 @@ function init(sources) {
 const firstWeek = xs[0];
 var hots = sources.filter(x => x.week === firstWeek);
 var colds = sources.filter(x => x.week !== firstWeek).sort((a,b) => b.week - a.week);
-
+var g;
 for(let i = 0; i < xs.length; i++) {
-  let g = forward(hots, colds);
+  g = forward(hots, colds);
 
   colds = [...g.hots, ...g.colds.filter(x => x.week !== xs[i+1])];
   hots = g.colds.filter(x => x.week === xs[i+1]);
+}
+
+try {
+  // 拠点間移動履歴
+  fs.writeFileSync("history.txt", JSON.stringify(g.colds, null, "\t"));
+  // 最終日に拠点で保持している数量
+  // finalize
+  storesHeldOnLastDay = g.colds.map(x => ({name: x.name, reserve: x.reserve, hold:x.hold + x.reserve}));
+  fs.writeFileSync("fixed.txt", JSON.stringify(storesHeldOnLastDay, null, "\t"));
+} catch(e) {
+  console.log(e.message);
 }
 
 function forward(hots_, colds_) {
