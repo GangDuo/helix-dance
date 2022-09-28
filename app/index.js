@@ -32,3 +32,18 @@ function init(sources) {
     }
   })
 }
+
+const firstWeek = xs[0];
+var hots = sources.filter(x => x.week === firstWeek);
+var colds = sources.filter(x => x.week !== firstWeek).sort((a,b) => b.week - a.week);
+
+for(let i = 0; i < xs.length; i++) {
+  let g = forward(hots, colds);
+
+  colds = [...g.hots, ...g.colds.filter(x => x.week !== xs[i+1])];
+  hots = g.colds.filter(x => x.week === xs[i+1]);
+}
+
+function forward(hots_, colds_) {
+  return {hots:hots_, colds:colds_};
+}
