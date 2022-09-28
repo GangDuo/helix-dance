@@ -18,3 +18,9 @@ json.forEach(x => {
     var s3 = Object.keys(x.out).map(key => xs[key] + "必着<br>" + x.out[key].map(y => `${y.store}: ${y.qty}`).join("<br>")).join("<br>")
     content.push(`|${x.name}|${s2}|${s3}|`);
 })
+
+try {
+    fs.writeFileSync("out.md", content.join('\n'));
+} catch(e) {
+    console.log(e.message);
+}
